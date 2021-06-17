@@ -67,9 +67,9 @@ export const tasksReducer = (state: TasksStateType = InitialState, action: Actio
             return {
                 ...state,
                 [action.todolistId]: state[action.todolistId]
-                    .map(task => {
+                    .map((task, index) => {
                         if (task.id === action.taskId) {
-                            return {...task, isDone: action.isDone}
+                            return {...task, key: {index},  isDone: action.isDone}
                         } else
                             return task
                     })
