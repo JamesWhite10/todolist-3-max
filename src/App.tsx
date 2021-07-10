@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import './App.css';
 import {AddItemForm} from "./AddItemForm";
 import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from "@material-ui/core";
@@ -6,10 +6,10 @@ import {Menu} from "@material-ui/icons";
 import {
     addTodolistAC,
     changeTodolistFilterAC,
-    changeTodolistTitleAC, FilterValuesType,
-    removeTodolistAC, TodoListDomainType,
+    changeTodolistTitleAC, fetchTodolistTC, FilterValuesType,
+    removeTodolistAC, TodolistDomainType
 } from "./state/todolists-reducer";
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from "./state/tasks-reducer";
+import {addTaskAC, updateTaskAC, removeTaskAC} from "./state/tasks-reducer";
 import {AppRootState} from "./state/store";
 import {useDispatch, useSelector} from "react-redux";
 import {TodoList} from "./TodoList";
@@ -22,8 +22,12 @@ export type TasksStateType = {
 const App = React.memo(() => {
     console.log("App is called")
     const dispatch = useDispatch()
-    const todoLists = useSelector<AppRootState, Array<TodoListDomainType>>(state => state.todoLists)
+    const todoLists = useSelector<AppRootState, Array<TodolistDomainType>>(state => state.todoLists)
     const tasks = useSelector<AppRootState, TasksStateType>(state => state.tasks)
+
+    useEffect(() => {
+        dispatch(fetchTodolistTC())
+    }, [])
 
     const removeTask = useCallback((id: string, todolistId: string) => {
         const action = removeTaskAC(id, todolistId)
@@ -35,30 +39,32 @@ const App = React.memo(() => {
         dispatch(action)
     }, [dispatch])
 
-    const changeStatus = useCallback((taskId: string, status: TaskStatuses, todolistId: string) => {
-        const action = changeTaskStatusAC(taskId, status, todolistId)
+    const changeStatus = useCallback(function (id: string, status: TaskStatuses, todolistId: string) {
+        const action = updateTaskAC(id, {status}, todolistId)
         dispatch(action)
     }, [dispatch])
 
-    const changeTaskTitle = useCallback((taskId: string, newTitle: string, todolistId: string) => {
-        const action = changeTaskTitleAC(taskId, newTitle, todolistId)
+    const changeTitle = useCallback(function (id: string, newTitle: string, todolistId: string) {
+        const action = updateTaskAC(id, {title: newTitle}, todolistId)
         dispatch(action)
     }, [dispatch])
 
-    const changeFilter = useCallback((value: FilterValuesType, todolistId: string) => {
-        dispatch(changeTodolistFilterAC(value, todolistId))
+    const changeFilter = useCallback(function (value: FilterValuesType, todolistId: string) {
+        const action = changeTodolistFilterAC(todolistId, value)
+        dispatch(action)
     }, [dispatch])
 
     const removeTodoList = useCallback((todolistId: string) => {
         dispatch(removeTodolistAC(todolistId))
     }, [dispatch])
 
-    const changeTodolistTitle = useCallback((todolistId: string, newTitle: string) => {
+    const changeTodoListTitle = useCallback((todolistId: string, newTitle: string) => {
         dispatch(changeTodolistTitleAC(todolistId, newTitle))
     }, [dispatch])
 
-    const addTodoList = useCallback( (title: string) => {
-        dispatch(addTodolistAC(title))
+    const addTodoList = useCallback((title: string) => {
+        const action = addTodolistAC(title)
+        dispatch(action)
     }, [dispatch])
 
     return (
@@ -96,10 +102,10 @@ const App = React.memo(() => {
                                         changeFilter={changeFilter}
                                         addTask={addTasks}
                                         changeTaskStatus={changeStatus}
-                                        changeTaskTitle={changeTaskTitle}
+                                        changeTaskTitle={changeTitle}
                                         filter={tl.filter}
                                         removeTodoList={removeTodoList}
-                                        changeTodoListTitle={changeTodolistTitle}
+                                        changeTodoListTitle={changeTodoListTitle}
                                     />
                                 </Paper>
                             </Grid>
