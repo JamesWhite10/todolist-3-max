@@ -1,13 +1,14 @@
-import {IconButton, TextField} from "@material-ui/core";
-import React, {ChangeEvent, KeyboardEvent, useState} from "react";
-import {AddBox} from "@material-ui/icons";
+import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
+import {IconButton, TextField} from '@material-ui/core';
+import {AddBox} from '@material-ui/icons';
 
 export type AddItemFormPropsType = {
     addItem: (title: string) => void
 }
 
-export const AddItemForm = React.memo((props: AddItemFormPropsType) => {
-    console.log("AddItemForm is called")
+export const AddItemForm = React.memo(function(props: AddItemFormPropsType) {
+    console.log("AddItemForm called")
+
     let [title, setTitle] = useState("")
     let [error, setError] = useState<string | null>(null)
 
@@ -16,17 +17,17 @@ export const AddItemForm = React.memo((props: AddItemFormPropsType) => {
             props.addItem(title);
             setTitle("");
         } else {
-            setError("Title is required!!!")
+            setError("Title is required");
         }
     }
 
-    const onChangeValue = (e: ChangeEvent<HTMLInputElement>) => {
+    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setTitle(e.currentTarget.value)
     }
 
     const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
         if (error !== null) {
-            setError(null)
+            setError(null);
         }
         if (e.key === "Enter") {
             addItem();
@@ -34,18 +35,16 @@ export const AddItemForm = React.memo((props: AddItemFormPropsType) => {
     }
 
     return <div>
-        <TextField
-            variant={"outlined"}
-            error={!!error}
-            label={"Task"}
-            value={title}
-            onChange={onChangeValue}
-            onKeyPress={onKeyPressHandler}
-            helperText={error}
+        <TextField variant="outlined"
+                   error={!!error}
+                   value={title}
+                   onChange={onChangeHandler}
+                   onKeyPress={onKeyPressHandler}
+                   label="Title"
+                   helperText={error}
         />
-        <IconButton
-            style={{margin: "5px", opacity: "0.9"}}
-            color={"primary"}
-            onClick={addItem}><AddBox/></IconButton>
+        <IconButton color="primary" onClick={addItem}>
+            <AddBox />
+        </IconButton>
     </div>
 })
