@@ -3,7 +3,7 @@ import {
     addTodolistAC, changeTodolistFilterAC,
     changeTodolistTitleAC, FilterValuesType,
     removeTodolistAC, setTodolistAC, TodolistDomainType, todolistsReducer
-} from "./todolists-reducer";
+} from "../features/TodolistList/todolists-reducer";
 
 let todolistId1 = v1();
 let todolistId2 = v1();
