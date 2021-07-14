@@ -8,6 +8,7 @@ import {TaskStatuses, TaskType} from '../../../api/todolists-api'
 import {FilterValuesType} from '../todolists-reducer'
 import {useDispatch} from "react-redux";
 import {fetchTasksTC} from "../tasks-reducer";
+import classes from "./Todolist.module.css"
 
 type PropsType = {
     id: string
@@ -57,7 +58,7 @@ export const Todolist = React.memo(function (props: PropsType) {
         tasksForTodolist = props.tasks.filter(t => t.status === TaskStatuses.Completed)
     }
 
-    return <div>
+    return <div className={classes.todolist}>
         <h3><EditableSpan value={props.title} onChange={changeTodolistTitle}/>
             <IconButton onClick={removeTodolist}>
                 <Delete/>
@@ -73,7 +74,7 @@ export const Todolist = React.memo(function (props: PropsType) {
                     />)
             }
         </div>
-        <div style={{paddingTop: '10px'}}>
+        <div style={{paddingTop: '10px', textAlign: "center"}}>
             <Button variant={props.filter === 'all' ? 'outlined' : 'text'}
                     onClick={onAllClickHandler}
                     color={'default'}
