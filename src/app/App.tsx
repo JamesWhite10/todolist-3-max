@@ -6,10 +6,11 @@ import {TodolistList} from "../features/TodolistList/TodolistList";
 import {ErrorSnackbar} from "../components/ErrorSnackbar/ErrorSnackbar";
 import {useSelector} from "react-redux";
 import {AppRootStateType} from "./store";
+import {RequestStatusType} from "./app-reducer";
 
 function App() {
 
-    const status = useSelector<AppRootStateType>(state => state.app.status)
+    const status = useSelector<AppRootStateType, RequestStatusType>(state => state.app.status)
 
     return (
         <div className={classes.app}>

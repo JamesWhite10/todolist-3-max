@@ -1,9 +1,9 @@
 import {
     addTaskAC,
-    changeTaskTitleAC,
     setTasksAC,
     tasksReducer,
-    TasksStateType
+    TasksStateType,
+    updateTaskAC
 } from '../features/TodolistList/tasks-reducer';
 import {v1} from "uuid";
 import {TaskPriorities, TaskStatuses} from "../api/todolists-api";
@@ -71,7 +71,14 @@ test('correct task should be added to correct array', () => {
 
 test('title of specified task should be changed', () => {
 
-    const action = changeTaskTitleAC("2", "milk", "todolistId2");
+    const action = updateTaskAC("2", {
+        status: TaskStatuses.New,
+        title: "milk",
+        priority: 0,
+        startDate: "",
+        description: "",
+        deadline: ""
+    }, "todolistId2");
     const endState = tasksReducer(startState, action)
     expect(endState['todolistId2'][1].title).toBe("milk");
     expect(endState['todolistId1'][1].title).toBe("JS")
@@ -121,7 +128,7 @@ test('empty arrays should be added when set todolist', () => {
     expect(endState["2"]).toStrictEqual([])
 })
 test('tasks should be added for todolist', () => {
-    const action = setTasksAC("todolistId1", startState["todolistId1"])
+    const action = setTasksAC(startState["todolistId1"], "todolistId1")
 
     const endState = tasksReducer({
         "todolistId2": [],
