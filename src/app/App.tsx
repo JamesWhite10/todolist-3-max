@@ -7,6 +7,8 @@ import {ErrorSnackbar} from "../components/ErrorSnackbar/ErrorSnackbar";
 import {useSelector} from "react-redux";
 import {AppRootStateType} from "./store";
 import {RequestStatusType} from "./app-reducer";
+import { Route } from 'react-router-dom';
+import {Login} from "../Login/Login";
 
 function App() {
 
@@ -25,9 +27,12 @@ function App() {
                     <Button color={"inherit"}>Login</Button>
                 </Toolbar>
             </AppBar>
-            {status === 'loading' && <LinearProgress color={"primary"}/>}
+            {status === "loading" && <LinearProgress color={"primary"}/>}
             <Container fixed>
-                <TodolistList/>
+                <Route exact path={"/"} render={() => <TodolistList/>}/>
+                <Route path={"/login"} render={() => <Login/>}/>
+                <Route/>
+
             </Container>
             <ErrorSnackbar/>
         </div>
