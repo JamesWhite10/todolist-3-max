@@ -4,8 +4,21 @@ import {
     Button, Grid
 } from '@material-ui/core'
 import {useFormik} from "formik";
+import {useDispatch, useSelector} from "react-redux";
+import {loginTC} from "./auth-reducer";
+import {AppRootStateType} from "../app/store";
+import {Redirect} from "react-router-dom";
 
 export const Login = () => {
+
+    const dispatch = useDispatch()
+    const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn)
+
+    type FormikErrorType = {
+        email?: string
+        password?: string
+        rememberMe?: boolean
+    }
 
     const formik = useFormik({
         initialValues: {
@@ -13,19 +26,39 @@ export const Login = () => {
             password: '',
             rememberMe: false
         },
+        validate: (values) => {
+            const errors: FormikErrorType = {};
+            if (!values.email) {
+                errors.email = 'Email is required';
+            } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+                errors.email = 'Invalid email address';
+            }
+            if (!values.password) {
+                errors.password = 'Password is required';
+            } else if (values.password.length < 8) {
+                errors.password = 'Invalid password';
+            }
+            return errors;
+
+        },
         onSubmit: values => {
-            alert(JSON.stringify(values, null, 2));
+            dispatch(loginTC(values))
+            formik.resetForm()
         },
     })
 
-    return <Grid container justify="center">
+    if (isLoggedIn) {
+        return <Redirect to={"/"}/>
+    }
+
+    return <Grid container justify="center" style={{textAlign: "center"}}>
         <Grid item xs={4}>
-            <form>
+            <form onSubmit={formik.handleSubmit}>
                 <FormControl>
                     <FormLabel>
                         <p>To log in get registered
                             <a href={'https://social-network.samuraijs.com/'}
-                               target={'_blank'}>here
+                               target={'_blank'} rel="noreferrer">here
                             </a>
                         </p>
                         <p>or use common test account credentials:</p>
@@ -36,21 +69,28 @@ export const Login = () => {
                         <TextField
                             label="Email"
                             margin="normal"
-                            name="email"
+                            {...formik.getFieldProps("email")}
                         />
+                        {formik.touched.email && formik.errors.email ? (
+                            <div style={{color: "red"}}>{formik.errors.email}</div>
+                        ) : null}
                         <TextField
                             type="password"
                             label="Password"
                             margin="normal"
-                            name="password"
+                            {...formik.getFieldProps("password")}
                         />
+                        {formik.touched.password && formik.errors.password ? (
+                            <div style={{color: "red"}}>{formik.errors.password}</div>
+                        ) : null}
                         <FormControlLabel
                             label={'Remember me'}
-                            control={<Checkbox/>}
-                            name="rememberMe"
+                            control={<Checkbox
+                                checked={formik.values.rememberMe}
+                                {...formik.getFieldProps("rememberMe")}/>}
                         />
                         <Button type={'submit'} variant={'contained'}
-                                color={'primary'}>Login</Button>
+                                color={'primary'}>Sign In</Button>
                     </FormGroup>
                 </FormControl>
             </form>
