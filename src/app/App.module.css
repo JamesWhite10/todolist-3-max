@@ -1,5 +1,6 @@
 .app {
   background-color: lavenderblush;
+  min-height: 1000px;
 }
 
 .isDone {
