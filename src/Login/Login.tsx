@@ -22,9 +22,9 @@ export const Login = () => {
 
     const formik = useFormik({
         initialValues: {
-            email: '',
-            password: '',
-            rememberMe: false
+            email: 'max.migalin10@gmail.com',
+            password: 'raperu88',
+            rememberMe: true
         },
         validate: (values) => {
             const errors: FormikErrorType = {};
