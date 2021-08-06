@@ -53,10 +53,10 @@ function App() {
                 <Switch>
                     <Route exact path={'/'} render={() => <TodolistList/>}/>
                     <Route path={'/login'} render={() => <Login/>}/>
-                    <Route path={'/404'}
+                  {/*  <Route path={'/404'}
                            render={() => <h1 style={{textAlign: 'center', fontSize: '50px'}}>404: PAGE NOT
-                               FOUND</h1>}/>
-                    <Redirect from={'*'} to={'/404'}/>
+                               FOUND</h1>}/>*/}
+                    <Redirect from={'*'} to={'/login'}/>
                 </Switch>
             </Container>
             <ErrorSnackbar/>
