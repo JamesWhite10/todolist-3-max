@@ -35,7 +35,7 @@ export const Login = () => {
             }
             if (!values.password) {
                 errors.password = 'Password is required';
-            } else if (values.password.length < 8) {
+            } else if (values.password.length < 3) {
                 errors.password = 'Invalid password';
             }
             return errors;
