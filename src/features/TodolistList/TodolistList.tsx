@@ -17,7 +17,7 @@ import {Todolist} from "./Todolist/Todolist";
 import {Redirect} from "react-router-dom";
 
 export const TodolistList: React.FC = () => {
-    const todolists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todolists)
+    const todolist = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todolist)
     const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
     const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn)
     const dispatch = useDispatch();
@@ -27,7 +27,7 @@ export const TodolistList: React.FC = () => {
             return;
         }
         dispatch(fetchTodolistTC())
-    }, [])
+    }, [dispatch, isLoggedIn])
 
     const removeTask = useCallback(function (id: string, todolistId: string) {
         const thunk = removeTaskTC(id, todolistId);
@@ -79,7 +79,7 @@ export const TodolistList: React.FC = () => {
         </Grid>
         <Grid container spacing={5}>
             {
-                todolists.map(tl => {
+                todolist.map(tl => {
                     let allTodolistTasks = tasks[tl.id];
 
                     return <Grid item key={tl.id}>
