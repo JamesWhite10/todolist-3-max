@@ -4,7 +4,7 @@ import {Dispatch} from "redux";
 
 export const handleServerAppError = <D>(data: ResponseType<D>, dispatch: Dispatch<SetAppStatus | SetAppError>) => {
     if (data.messages.length) {
-        dispatch(setAppErrorAC(data.messages[0]))
+        dispatch(setAppErrorAC({error: data.messages[0]}))
     } else {
         dispatch(setAppErrorAC({error: 'Some error occurred'}))
     }
@@ -12,6 +12,6 @@ export const handleServerAppError = <D>(data: ResponseType<D>, dispatch: Dispatc
 }
 
 export const handleServerNetworkError = (error: {message: string}, dispatch: Dispatch<SetAppStatus | SetAppError>) => {
-    dispatch(setAppErrorAC(error.message ? error.message : {error: 'Some error occurred'}))
+    dispatch(setAppErrorAC({error: error.message ? error.message : 'Some error occurred'}))
     dispatch(setAppStatusAC({status: 'failed'}))
 }

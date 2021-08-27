@@ -1,5 +1,5 @@
 import {tasksReducer} from '../features/TodolistList/tasks-reducer';
-import {todolistsReducer} from '../features/TodolistList/todolists-reducer';
+import {todolistReducer} from '../features/TodolistList/todolists-reducer';
 import {combineReducers} from 'redux';
 import thunkMiddleware from 'redux-thunk'
 import {appReducer} from "./app-reducer";
@@ -10,7 +10,7 @@ import {configureStore} from "@reduxjs/toolkit";
 // мы задаём структуру нашего единственного объекта-состояния
 const rootReducer = combineReducers({
     tasks: tasksReducer,
-    todolist: todolistsReducer,
+    todolist: todolistReducer,
     app: appReducer,
     auth: authReducer
 })

@@ -3,8 +3,6 @@ import {authAPI} from "../api/todolists-api";
 import {setIsLoggedInAC} from "../Login/auth-reducer";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
-export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
-
 //status === 'loading' крутилку показываем в остальных нет
 
 const initialState = {
@@ -23,8 +21,8 @@ const slice = createSlice({
         setAppStatusAC (state, action: PayloadAction<{status: RequestStatusType}>) {
             state.status = action.payload.status
         },
-        setAppInitializedAC (state, action: PayloadAction<{value: boolean}>) {
-            state.isInitialized = action.payload.value
+        setAppInitializedAC (state, action: PayloadAction<{isInitialized: boolean}>) {
+            state.isInitialized = action.payload.isInitialized
         }
     }
 })
@@ -39,18 +37,19 @@ export const initializeAppTC = () => (dispatch: Dispatch) => {
     authAPI.me().then(res => {
         if (res.data.resultCode === 0) {
             dispatch(setIsLoggedInAC({value: true}));
-            dispatch(setAppInitializedAC({value: true}))
+            dispatch(setAppInitializedAC({isInitialized: true}))
             dispatch(setAppStatusAC({status: 'succeeded'}))
         } else {
             dispatch(setAppStatusAC({status: 'failed'}))
         }
     })
         .finally(() => {
-            dispatch(setAppInitializedAC({value: true}))
+            dispatch(setAppInitializedAC({isInitialized: true}))
         })
 }
 
 export type InitialStateType = typeof initialState
+export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
 export type SetAppError = ReturnType<typeof setAppErrorAC>
 export type SetAppStatus = ReturnType<typeof setAppStatusAC>
 export type SetAppInitialized = ReturnType<typeof setAppInitializedAC>
