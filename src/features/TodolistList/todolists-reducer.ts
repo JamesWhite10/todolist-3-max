@@ -1,6 +1,6 @@
 import {todolistsAPI, TodolistType} from '../../api/todolists-api'
 import {Dispatch} from 'redux'
-import {RequestStatusType, setAppStatusAC} from '../../app/app-reducer'
+import {initializeAppTC, RequestStatusType, setAppStatusAC} from '../../app/app-reducer'
 import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
@@ -17,7 +17,7 @@ const slice = createSlice({
             }
         },
         addTodolistAC (state, action: PayloadAction<{todolist: TodolistType}>) {
-            state.push({...action.payload.todolist, filter: 'all', entityStatus: 'idle'})
+            state.unshift({...action.payload.todolist, filter: 'all', entityStatus: 'idle'})
         },
         changeTodolistTitleAC (state, action: PayloadAction<{id: string, title: string}>) {
             const index = state.findIndex(tl => tl.id !== action.payload.id)
