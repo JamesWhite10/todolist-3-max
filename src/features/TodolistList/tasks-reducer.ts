@@ -17,36 +17,36 @@ import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 const initialState: TasksStateType = {}
 
 const slice = createSlice({
-    name: "tasks",
+    name: 'tasks',
     initialState,
     reducers: {
-        removeTaskAC (state, action: PayloadAction<{taskId: string, todolistId: string}>) {
+        removeTaskAC(state, action: PayloadAction<{ taskId: string, todolistId: string }>) {
             const tasks = state[action.payload.todolistId]
             const index = tasks.findIndex(t => t.id === action.payload.taskId)
             if (index > -1) {
                 tasks.splice(index, 1)
             }
         },
-        addTaskAC (state, action: PayloadAction<{task: TaskType}>) {
+        addTaskAC(state, action: PayloadAction<{ task: TaskType }>) {
             state[action.payload.task.todoListId].unshift(action.payload.task)
         },
-        updateTaskAC (state, action: PayloadAction<{taskId: string, model: UpdateDomainTaskModelType, todolistId: string}>) {
+        updateTaskAC(state, action: PayloadAction<{ taskId: string, model: UpdateDomainTaskModelType, todolistId: string }>) {
             const tasks = state[action.payload.todolistId]
             const index = tasks.findIndex(t => t.id === action.payload.taskId)
             if (index > -1) {
                 tasks[index] = {...tasks[index], ...action.payload.model}
             }
         },
-        setTasksAC (state, action: PayloadAction<{tasks: Array<TaskType>, todolistId: string}>) {
+        setTasksAC(state, action: PayloadAction<{ tasks: Array<TaskType>, todolistId: string }>) {
             state[action.payload.todolistId] = action.payload.tasks
         }
     },
     extraReducers: (builder) => {
         builder.addCase(addTodolistAC, (state, action) => {
-            state[action.payload.todolist.id] = []
+            state[action.payload.todolist.id] = [];
         });
         builder.addCase(removeTodolistAC, (state, action) => {
-            delete state[action.payload.id]
+            delete state[action.payload.id];
         });
         builder.addCase(setTodolistAC, (state, action) => {
             action.payload.todolist.forEach((tl: any) => {
@@ -59,10 +59,7 @@ const slice = createSlice({
 export const tasksReducer = slice.reducer
 
 // actions
-export const removeTaskAC = slice.actions.removeTaskAC
-export const addTaskAC = slice.actions.addTaskAC
-export const updateTaskAC = slice.actions.updateTaskAC
-export const setTasksAC = slice.actions.setTasksAC
+export const {removeTaskAC, addTaskAC, updateTaskAC, setTasksAC} = slice.actions
 
 // thunks
 export const fetchTasksTC = (todolistId: string) => (dispatch: Dispatch) => {
